@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './index.css';
+import {Provider} from 'react-redux';
+import store from './store';
 
 const cheeseList = [
     "Bath Blue",
@@ -10,6 +11,8 @@ const cheeseList = [
 ];
 
 ReactDOM.render(
-  <App cheeses={cheeseList}/>,
+  <Provider store={store}>
+    <App cheeses={cheeseList}/>
+  </Provider>,
   document.getElementById('root')
 );
