@@ -33,3 +33,27 @@ export const fetchCheeses = () => (dispatch) => {
     return dispatch(cheeseFailure(error));
   });
 }
+
+export const addCheese = (cheese) => (dispatch) => {
+  dispatch(cheeseRequest());
+  return fetch('http://localhost:8080/api/cheeses', {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({cheese})
+  })
+  .then(res=> {
+    if(!res.ok){
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  })
+  .then(res=> {
+    return dispatch(cheeseSuccess(res));
+  })
+  .catch(error=> {
+    return dispatch(cheeseFailure(error));
+  });
+}

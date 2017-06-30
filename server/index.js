@@ -1,9 +1,11 @@
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 
 const cheeseArray = [
     "Bath Blue",
@@ -27,6 +29,16 @@ const cheeseArray = [
 // API endpoints go here!
 app.get('/api/cheeses',(req,res)=>{
   res.json(cheeseArray);
+});
+
+app.post('/api/cheeses', (req, res)=>{
+  if(!req.body.cheese){
+    console.error("You must have a cheese to add  if you'd like to add a cheese");
+    res.sendStatus(400);
+  }
+  let cheese = req.body.cheese;
+  cheeseArray.push(cheese);
+  res.status(201).json(cheeseArray);
 });
 
 // Serve the built client
