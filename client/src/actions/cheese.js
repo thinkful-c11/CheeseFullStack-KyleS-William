@@ -24,8 +24,8 @@ export const cheeseFailure = (error) => ({
 
 export const fetchCheeses = () => (dispatch) => {
   dispatch(cheeseRequest());
-  //return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses')
-  return fetch('http://localhost:8080/api/cheeses')
+  return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses')
+  //return fetch('http://localhost:8080/api/cheeses')
   .then(res=>{
     if(!res.ok){
       return Promise.reject(res.statusText);
@@ -42,8 +42,8 @@ export const fetchCheeses = () => (dispatch) => {
 
 export const addCheese = (cheese) => (dispatch) => {
   dispatch(cheeseRequest());
-  //return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses', {
-  return fetch('http://localhost:8080/api/cheeses', {
+  return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses', {
+  //return fetch('http://localhost:8080/api/cheeses', {
     method: 'POST',
     mode: 'cors',
     headers: {
