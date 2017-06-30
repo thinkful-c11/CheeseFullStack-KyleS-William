@@ -7,6 +7,7 @@ export class CheeseList extends React.Component{
     this.props.dispatch(fetchCheeses());
   }
   render(){
+    console.log(this.props.cheeses);
     const cheeseList = this.props.cheeses.map((cheese,ind)=>{
       return <li key={ind} id={ind}>{cheese}</li>
     });

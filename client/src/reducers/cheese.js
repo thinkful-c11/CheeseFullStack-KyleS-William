@@ -13,9 +13,10 @@ export default function reducer(state = initialState, action){
         loading: true,
         error: null
       });
-    case actions.CHEESE_SUCCESS:
+    case actions.CHEESE_GET_SUCCESS:
+      const cheeses = action.cheeses.map(cheese => cheese.cheese);
       return Object.assign({}, state, {
-        cheeses: action.cheeses,
+        cheeses,
         loading: false,
         error: null
       });
@@ -24,6 +25,12 @@ export default function reducer(state = initialState, action){
         loading: false,
         error: action.error
       });
+    case actions.CHEESE_POST_SUCCESS:
+      return Object.assign({},state,{
+        cheeses: [...state.cheeses,action.cheeses.cheese],
+        loading:false,
+        error:null
+      })
     default:
       return state;
   }

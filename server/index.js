@@ -2,10 +2,14 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const {DATABASE_URL} = require('../config');
+const {Cheese} = require('./model');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+mongoose.Promise = global.Promise;
 
 const cheeseArray = [
     "Bath Blue",
@@ -28,7 +32,9 @@ const cheeseArray = [
 ];
 // API endpoints go here!
 app.get('/api/cheeses',(req,res)=>{
-  res.json(cheeseArray);
+  Cheese
+  .find()
+  .then(cheeseArray=> res.json(cheeseArray));
 });
 
 app.post('/api/cheeses', (req, res)=>{
@@ -37,8 +43,11 @@ app.post('/api/cheeses', (req, res)=>{
     res.sendStatus(400);
   }
   let cheese = req.body.cheese;
-  cheeseArray.push(cheese);
-  res.status(201).json(cheeseArray);
+  Cheese
+  .create({cheese})
+  .then(cheese =>res.status(201).json(cheese));
+  // cheeseArray.push(cheese);
+  // res.status(201).json(cheeseArray);
 });
 
 // Serve the built client
@@ -52,21 +61,34 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
 });
 
 let server;
-function runServer(port=3001) {
+function runServer(databaseUrl=DATABASE_URL, port=3001) {
+  //console.log(databaseUrl);
   return new Promise((resolve, reject) => {
-    server = app.listen(port, () => {
-      resolve();
-    }).on('error', reject);
+    mongoose.connect(databaseUrl,err=>{
+      if(err){
+        return reject(err);
+      }
+      server = app.listen(port, () => {
+        console.log(`Your app is listening on port ${port}`);
+        resolve();
+      })
+      .on('error', err=>{
+        mongoose.disconnect();
+        reject(err);
+      });
+    });
   });
 }
 
 function closeServer() {
-  return new Promise((resolve, reject) => {
-    server.close(err => {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
+  return mongoose.disconnect().then(() =>{
+    return new Promise((resolve, reject) => {
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
     });
   });
 }

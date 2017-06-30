@@ -3,9 +3,15 @@ export const cheeseRequest = () => ({
   type: CHEESE_REQUEST
 });
 
-export const CHEESE_SUCCESS = 'CHEESE_SUCCESS';
-export const cheeseSuccess = (cheeses) => ({
-  type: CHEESE_SUCCESS,
+export const CHEESE_GET_SUCCESS = 'CHEESE_GET_SUCCESS';
+export const cheeseGetSuccess = (cheeses) => ({
+  type: CHEESE_GET_SUCCESS,
+  cheeses
+});
+
+export const CHEESE_POST_SUCCESS = 'CHEESE_POST_SUCCESS';
+export const cheesePostSuccess = (cheeses) => ({
+  type: CHEESE_POST_SUCCESS,
   cheeses
 });
 
@@ -18,8 +24,8 @@ export const cheeseFailure = (error) => ({
 
 export const fetchCheeses = () => (dispatch) => {
   dispatch(cheeseRequest());
-  return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses')
-  //return fetch('http://localhost:8080/api/cheeses')
+  //return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses')
+  return fetch('http://localhost:8080/api/cheeses')
   .then(res=>{
     if(!res.ok){
       return Promise.reject(res.statusText);
@@ -27,7 +33,7 @@ export const fetchCheeses = () => (dispatch) => {
     return res.json();
   })
   .then(res => {
-    return dispatch(cheeseSuccess(res));
+    return dispatch(cheeseGetSuccess(res));
   })
   .catch(error=> {
     return dispatch(cheeseFailure(error));
@@ -36,8 +42,8 @@ export const fetchCheeses = () => (dispatch) => {
 
 export const addCheese = (cheese) => (dispatch) => {
   dispatch(cheeseRequest());
-  return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses', {
-  //return fetch('http://localhost:8080/api/cheeses', {
+  //return fetch('https://hidden-mountain-34149.herokuapp.com/api/cheeses', {
+  return fetch('http://localhost:8080/api/cheeses', {
     method: 'POST',
     mode: 'cors',
     headers: {
@@ -52,7 +58,7 @@ export const addCheese = (cheese) => (dispatch) => {
     return res.json();
   })
   .then(res=> {
-    return dispatch(cheeseSuccess(res));
+    return dispatch(cheesePostSuccess(res));
   })
   .catch(error=> {
     return dispatch(cheeseFailure(error));
