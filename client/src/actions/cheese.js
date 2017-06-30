@@ -19,10 +19,16 @@ export const cheeseFailure = (error) => ({
 export const fetchCheeses = () => (dispatch) => {
   dispatch(cheeseRequest());
   return fetch('http://localhost:8080/api/cheeses')
+  .then(res=>{
+    if(!res.ok){
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  })
   .then(res => {
-    dispatch(cheeseSuccess(res));
+    return dispatch(cheeseSuccess(res));
   })
   .catch(error=> {
-    dispatch(cheeseFailure(error));
+    return dispatch(cheeseFailure(error));
   });
 }

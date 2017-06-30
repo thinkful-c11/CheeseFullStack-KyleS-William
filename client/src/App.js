@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
     <div>
-      <CheeseList cheeses={this.props.cheeses} />
+      <CheeseList />
     </div>
     );
   }
